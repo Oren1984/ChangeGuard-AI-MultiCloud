@@ -1,0 +1,18 @@
+{
+  "description": "Triggers the mock AI provider's low-confidence demo mode (0.15, below the 0.35 hard floor). Gate 3 (confidence) must hard-fail this.",
+  "expected_state": "BLOCKED",
+  "expected_decision": "HARD_BLOCK",
+  "payload": {
+    "change_id": "demo-09-low-confidence",
+    "repository": "org/service-a",
+    "branch": "feature/y",
+    "commit_sha": "9999999999999999999999999999999999999999",
+    "author": "dev.heidi",
+    "change_type": "application_code",
+    "changed_files": ["src/app/handlers.py"],
+    "has_rollback_plan": true,
+    "environment_target": "staging",
+    "tests_passed": true,
+    "metadata": {"_demo": "low_confidence"}
+  }
+}

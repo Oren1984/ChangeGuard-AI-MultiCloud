@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChangeGuard AI MultiCloud — Governance Dashboard</title>
+    <link rel="stylesheet" href="/static/css/dashboard.css" />
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">ChangeGuard <span>AI MultiCloud</span></div>
+        <div class="status-pill {{ 'pill-danger' if kill_switch_state.active else 'pill-ok' }}">
+            Kill switch: {{ 'ACTIVE' if kill_switch_state.active else 'inactive' }}
+        </div>
+        <div class="status-pill {{ 'pill-ok' if verification.is_valid else 'pill-danger' }}">
+            Audit chain: {{ 'verified' if verification.is_valid else 'TAMPERED' }} ({{ verification.total_records }} records)
+        </div>
+    </header>
+
+    <main>
+        <section class="cards">
+            <div class="card">
+                <h2>Change states</h2>
+                <ul class="kv-list">
+                    {% for state, count in state_counts.items() %}
+                    <li><span>{{ state }}</span><strong>{{ count }}</strong></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>Risk distribution (recent)</h2>
+                <ul class="kv-list">
+                    {% for level, count in risk_counts.items() %}
+                    <li><span>{{ level }}</span><strong>{{ count }}</strong></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>CAB review queue</h2>
+                <p class="big-number">{{ cab_queue_total }}</p>
+                <ul class="kv-list">
+                    {% for ticket in cab_queue %}
+                    <li><span>{{ ticket.change_id }}</span><strong>{{ ticket.risk_level }}</strong></li>
+                    {% else %}
+                    <li><span>No pending tickets.</span></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Recent changes</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Change ID</th>
+                        <th>Repository</th>
+                        <th>Type</th>
+                        <th>Environment</th>
+                        <th>State</th>
+                        <th>Risk</th>
+                        <th>Decision</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in recent_records %}
+                    <tr>
+                        <td>{{ record.change.change_id }}</td>
+                        <td>{{ record.change.repository }}</td>
+                        <td>{{ record.change.change_type.value }}</td>
+                        <td>{{ record.change.environment_target.value }}</td>
+                        <td><span class="badge state-{{ record.state.value|lower }}">{{ record.state.value }}</span></td>
+                        <td>{{ record.risk_assessment.level.label if record.risk_assessment else '—' }}</td>
+                        <td>{{ record.routing_decision.decision.value if record.routing_decision else '—' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="7">No changes submitted yet.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        Read-only governance view. Approval actions are API-driven. See <code>/docs</code> for the full API.
+    </footer>
+</body>
+</html>

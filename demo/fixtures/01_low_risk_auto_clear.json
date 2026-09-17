@@ -1,0 +1,18 @@
+{
+  "description": "Low-risk application code change with tests passing and a rollback plan. Expected to auto-clear.",
+  "expected_state": "READY_TO_SHIP",
+  "expected_decision": "AUTO_CLEAR",
+  "payload": {
+    "change_id": "demo-01-low-risk",
+    "repository": "org/service-a",
+    "branch": "feature/small-fix",
+    "commit_sha": "1111111111111111111111111111111111111111",
+    "author": "dev.alice",
+    "change_type": "application_code",
+    "changed_files": ["src/app/handlers.py", "tests/test_handlers.py"],
+    "diff": "- old behaviour\n+ new behaviour",
+    "has_rollback_plan": true,
+    "environment_target": "staging",
+    "tests_passed": true
+  }
+}

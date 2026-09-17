@@ -1,0 +1,18 @@
+{
+  "description": "Database migration drops a production table with no rollback plan. Mandatory hard-block rule (RISK-DB-001).",
+  "expected_state": "BLOCKED",
+  "expected_decision": "HARD_BLOCK",
+  "payload": {
+    "change_id": "demo-06-destructive-migration",
+    "repository": "org/service-c",
+    "branch": "main",
+    "commit_sha": "6666666666666666666666666666666666666666",
+    "author": "dev.erin",
+    "change_type": "db_migration",
+    "changed_files": ["migrations/0042_drop_legacy_orders.sql"],
+    "migration_statements": ["DROP TABLE legacy_orders;"],
+    "has_rollback_plan": false,
+    "environment_target": "production",
+    "tests_passed": true
+  }
+}

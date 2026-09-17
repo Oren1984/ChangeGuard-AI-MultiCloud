@@ -1,0 +1,17 @@
+{
+  "description": "Demonstrates fail-closed kill-switch behavior: the admin activates the AI kill switch, an otherwise auto-clearing change is submitted, and it is routed to mandatory human review instead of AUTO_CLEAR. The switch is deactivated afterwards.",
+  "expected_state_with_kill_switch_active": "CAB_REVIEW_REQUIRED",
+  "expected_decision_with_kill_switch_active": "CAB_REVIEW_REQUIRED",
+  "payload": {
+    "change_id": "demo-12-kill-switch",
+    "repository": "org/service-a",
+    "branch": "feature/kill-switch-demo",
+    "commit_sha": "cccccccccccccccccccccccccccccccccccccccc",
+    "author": "dev.kim",
+    "change_type": "application_code",
+    "changed_files": ["src/app/handlers.py"],
+    "has_rollback_plan": true,
+    "environment_target": "staging",
+    "tests_passed": true
+  }
+}

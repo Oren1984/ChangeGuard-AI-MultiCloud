@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  CHANGEGUARD_DATABASE_URL: postgresql+psycopg://changeguard:changeguard@localhost:5432/changeguard
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: changeguard
+          POSTGRES_PASSWORD: changeguard
+          POSTGRES_DB: changeguard
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U changeguard"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Static checks (ruff)
+        run: ruff check src tests
+
+      - name: Unit tests
+        run: pytest tests/unit -v
+
+      - name: Apply database migrations
+        run: alembic upgrade head
+
+      - name: Integration, assurance, security and e2e tests
+        run: pytest tests/integration tests/assurance tests/security tests/e2e -v
+
+      - name: Full coverage run
+        run: pytest tests --cov=src --cov-report=term-missing
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build application image
+        run: docker build -t changeguard-app:ci .
+
+      - name: Validate docker-compose configuration
+        run: docker compose config
+
+  terraform:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        cloud: [aws, gcp]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.8"
+
+      - name: Terraform fmt check
+        working-directory: infrastructure/${{ matrix.cloud }}
+        run: terraform fmt -check -recursive
+
+      - name: Terraform init (no backend)
+        working-directory: infrastructure/${{ matrix.cloud }}
+        run: terraform init -backend=false
+
+      - name: Terraform validate
+        working-directory: infrastructure/${{ matrix.cloud }}
+        run: terraform validate

@@ -1,0 +1,18 @@
+{
+  "description": "Triggers the mock AI provider's fabricated-evidence demo mode: it cites a file never present in the change. Gate 2 (grounding) must hard-fail this.",
+  "expected_state": "BLOCKED",
+  "expected_decision": "HARD_BLOCK",
+  "payload": {
+    "change_id": "demo-08-fabricated-evidence",
+    "repository": "org/service-a",
+    "branch": "feature/x",
+    "commit_sha": "8888888888888888888888888888888888888888",
+    "author": "dev.grace",
+    "change_type": "application_code",
+    "changed_files": ["src/app/handlers.py"],
+    "has_rollback_plan": true,
+    "environment_target": "staging",
+    "tests_passed": true,
+    "metadata": {"_demo": "fabricated_evidence"}
+  }
+}

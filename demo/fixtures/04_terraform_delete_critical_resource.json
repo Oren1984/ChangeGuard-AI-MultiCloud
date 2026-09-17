@@ -1,0 +1,27 @@
+{
+  "description": "Terraform plan permanently deletes a production database instance. Mandatory hard-block rule (RISK-TF-001).",
+  "expected_state": "BLOCKED",
+  "expected_decision": "HARD_BLOCK",
+  "payload": {
+    "change_id": "demo-04-delete-critical-resource",
+    "repository": "org/infra",
+    "branch": "main",
+    "commit_sha": "4444444444444444444444444444444444444444",
+    "author": "dev.carol",
+    "change_type": "terraform_plan",
+    "changed_files": ["infra/database.tf"],
+    "terraform_plan": {
+      "resource_changes": [
+        {
+          "address": "aws_db_instance.primary",
+          "resource_type": "aws_db_instance",
+          "actions": ["delete"],
+          "attributes": {"identifier": "primary-db"}
+        }
+      ]
+    },
+    "has_rollback_plan": false,
+    "environment_target": "production",
+    "tests_passed": true
+  }
+}

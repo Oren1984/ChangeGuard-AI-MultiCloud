@@ -1,0 +1,19 @@
+{
+  "description": "Otherwise low-risk change where the AI opinion lands in the confidence warning band, forcing mandatory human review before it can proceed.",
+  "expected_state": "CAB_REVIEW_REQUIRED",
+  "expected_decision": "CAB_REVIEW_REQUIRED",
+  "payload": {
+    "change_id": "demo-02-medium-risk",
+    "repository": "org/service-b",
+    "branch": "feature/refactor",
+    "commit_sha": "2222222222222222222222222222222222222222",
+    "author": "dev.bob",
+    "change_type": "application_code",
+    "changed_files": ["src/app/service.py"],
+    "diff": "- old\n+ new",
+    "has_rollback_plan": true,
+    "environment_target": "staging",
+    "tests_passed": true,
+    "metadata": {"_demo": "warning_confidence"}
+  }
+}

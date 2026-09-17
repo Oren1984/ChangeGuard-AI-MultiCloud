@@ -1,0 +1,18 @@
+{
+  "description": "IAM policy change grants wildcard Action/Resource privileges. Mandatory hard-block rule (RISK-IAM-001).",
+  "expected_state": "BLOCKED",
+  "expected_decision": "HARD_BLOCK",
+  "payload": {
+    "change_id": "demo-05-iam-wildcard",
+    "repository": "org/infra",
+    "branch": "main",
+    "commit_sha": "5555555555555555555555555555555555555555",
+    "author": "dev.dave",
+    "change_type": "iam_policy",
+    "changed_files": ["infra/iam_policy.json"],
+    "diff": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"*\",\"Resource\":\"*\"}]}",
+    "has_rollback_plan": true,
+    "environment_target": "production",
+    "tests_passed": true
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "description": "Triggers the mock secondary provider's drift mode, producing a materially different second opinion. Gate 5 (consistency) must force mandatory human review.",
+  "expected_state": "CAB_REVIEW_REQUIRED",
+  "expected_decision": "CAB_REVIEW_REQUIRED",
+  "payload": {
+    "change_id": "demo-11-inconsistent-ai",
+    "repository": "org/service-a",
+    "branch": "feature/w",
+    "commit_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "author": "dev.judy",
+    "change_type": "application_code",
+    "changed_files": ["src/app/handlers.py"],
+    "has_rollback_plan": true,
+    "environment_target": "staging",
+    "tests_passed": true,
+    "metadata": {"_demo": "inconsistent"}
+  }
+}

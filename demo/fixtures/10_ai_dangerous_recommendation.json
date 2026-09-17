@@ -1,0 +1,18 @@
+{
+  "description": "Triggers the mock AI provider's dangerous-recommendation demo mode (recommends `terraform destroy`). Gate 4 (safety) must categorically hard-fail this.",
+  "expected_state": "BLOCKED",
+  "expected_decision": "HARD_BLOCK",
+  "payload": {
+    "change_id": "demo-10-dangerous-recommendation",
+    "repository": "org/infra",
+    "branch": "feature/z",
+    "commit_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "author": "dev.ivan",
+    "change_type": "terraform_plan",
+    "changed_files": ["infra/main.tf"],
+    "has_rollback_plan": true,
+    "environment_target": "staging",
+    "tests_passed": true,
+    "metadata": {"_demo": "dangerous_recommendation"}
+  }
+}

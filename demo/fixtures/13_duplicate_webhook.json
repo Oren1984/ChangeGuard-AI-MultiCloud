@@ -1,0 +1,21 @@
+{
+  "description": "Simulated GitHub pull_request webhook delivered twice (as a provider retry would). Demonstrates idempotent intake: first delivery creates the change (201), the replay returns the existing record (200) without creating a duplicate.",
+  "provider": "github",
+  "payload": {
+    "repository": {"full_name": "org/service-a"},
+    "pull_request": {
+      "number": 101,
+      "head": {"ref": "feature/webhook-demo", "sha": "dddddddddddddddddddddddddddddddddddddddd"},
+      "user": {"login": "dev.liam"}
+    },
+    "files": ["src/app/webhook_handler.py"],
+    "diff": "- old\n+ new",
+    "changeguard": {
+      "change_id": "demo-13-duplicate-webhook",
+      "change_type": "application_code",
+      "has_rollback_plan": true,
+      "environment_target": "staging",
+      "tests_passed": true
+    }
+  }
+}
