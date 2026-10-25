@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 860" width="1200" height="860" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="860" fill="#ffffff"/>
+
+  <text x="600" y="34" text-anchor="middle" font-size="22" font-weight="700" fill="#0f172a">ChangeGuard AI MultiCloud: components and local deployment</text>
+  <text x="600" y="58" text-anchor="middle" font-size="13" fill="#475569">Modular monolith (FastAPI, Python 3.12) with Clean Architecture layering. Solid = implemented and run locally; dashed = optional or reference only.</text>
+
+  <!-- Callers -->
+  <text x="120" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">Callers</text>
+  <g font-size="12" fill="#0f172a">
+    <rect x="20" y="110" width="200" height="56" rx="8" fill="#f1f5f9" stroke="#94a3b8"/>
+    <text x="120" y="133" text-anchor="middle" font-weight="600">Developer / CI client</text>
+    <text x="120" y="152" text-anchor="middle" fill="#475569">POST /api/v1/changes, /evaluate</text>
+
+    <rect x="20" y="178" width="200" height="56" rx="8" fill="#f1f5f9" stroke="#94a3b8"/>
+    <text x="120" y="201" text-anchor="middle" font-weight="600">Simulated VCS webhook</text>
+    <text x="120" y="220" text-anchor="middle" fill="#475569">GitHub / GitLab-shaped JSON</text>
+
+    <rect x="20" y="246" width="200" height="56" rx="8" fill="#f1f5f9" stroke="#94a3b8"/>
+    <text x="120" y="269" text-anchor="middle" font-weight="600">CAB approver</text>
+    <text x="120" y="288" text-anchor="middle" fill="#475569">approve / reject (API only)</text>
+
+    <rect x="20" y="314" width="200" height="56" rx="8" fill="#f1f5f9" stroke="#94a3b8"/>
+    <text x="120" y="337" text-anchor="middle" font-weight="600">Admin</text>
+    <text x="120" y="356" text-anchor="middle" fill="#475569">kill switch on / off</text>
+
+    <rect x="20" y="382" width="200" height="56" rx="8" fill="#f1f5f9" stroke="#94a3b8"/>
+    <text x="120" y="405" text-anchor="middle" font-weight="600">Browser</text>
+    <text x="120" y="424" text-anchor="middle" fill="#475569">read-only /dashboard, /docs</text>
+  </g>
+  <text x="120" y="462" text-anchor="middle" font-size="11" fill="#64748b">Identity: X-ChangeGuard-Actor and</text>
+  <text x="120" y="477" text-anchor="middle" font-size="11" fill="#64748b">X-ChangeGuard-Role headers (POC only)</text>
+
+  <!-- App container -->
+  <rect x="260" y="80" width="620" height="520" rx="12" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+  <text x="570" y="104" text-anchor="middle" font-size="15" font-weight="700" fill="#1e3a8a">app container: uvicorn src.main:app (port 8000)</text>
+
+  <!-- API layer -->
+  <rect x="280" y="118" width="580" height="74" rx="8" fill="#ffffff" stroke="#60a5fa"/>
+  <text x="296" y="140" font-size="13" font-weight="700" fill="#1e3a8a">api/: FastAPI routes and dependency wiring</text>
+  <text x="296" y="160" font-size="12" fill="#334155">changes, webhooks, cab, admin, audit, system, dashboard (Jinja2), /health, /ready, /metrics</text>
+  <text x="296" y="179" font-size="12" fill="#334155">Middleware: correlation ID, payload-size limit (413), security headers, redacted error responses</text>
+
+  <!-- Application layer -->
+  <rect x="280" y="204" width="580" height="122" rx="8" fill="#ffffff" stroke="#60a5fa"/>
+  <text x="296" y="226" font-size="13" font-weight="700" fill="#1e3a8a">application/: use cases and orchestration</text>
+  <g font-size="12" fill="#0f172a">
+    <rect x="296" y="238" width="176" height="76" rx="6" fill="#dbeafe" stroke="#93c5fd"/>
+    <text x="384" y="259" text-anchor="middle" font-weight="600">EvaluationPipeline</text>
+    <text x="384" y="277" text-anchor="middle" fill="#334155">risk, AI, gates, routing,</text>
+    <text x="384" y="294" text-anchor="middle" fill="#334155">state change, audit</text>
+
+    <rect x="482" y="238" width="176" height="76" rx="6" fill="#dbeafe" stroke="#93c5fd"/>
+    <text x="570" y="259" text-anchor="middle" font-weight="600">5 assurance gates</text>
+    <text x="570" y="277" text-anchor="middle" fill="#334155">schema, grounding,</text>
+    <text x="570" y="294" text-anchor="middle" fill="#334155">confidence, safety, consistency</text>
+
+    <rect x="668" y="238" width="176" height="76" rx="6" fill="#dbeafe" stroke="#93c5fd"/>
+    <text x="756" y="259" text-anchor="middle" font-weight="600">Pure decision router</text>
+    <text x="756" y="277" text-anchor="middle" fill="#334155">+ CAB decision use case</text>
+    <text x="756" y="294" text-anchor="middle" fill="#334155">+ kill switch use case</text>
+  </g>
+
+  <!-- Domain layer -->
+  <rect x="280" y="338" width="580" height="74" rx="8" fill="#ffffff" stroke="#60a5fa"/>
+  <text x="296" y="360" font-size="13" font-weight="700" fill="#1e3a8a">domain/: pure Python, no framework or I/O imports</text>
+  <text x="296" y="380" font-size="12" fill="#334155">Risk engine (16 rules, score 0-100, LOW/MEDIUM/HIGH/CRITICAL) · change state machine (allow-list)</text>
+  <text x="296" y="399" font-size="12" fill="#334155">Policies: separation of duties · kill switch · SHA-256 audit hash chain</text>
+
+  <!-- Ports / adapters -->
+  <rect x="280" y="424" width="580" height="160" rx="8" fill="#ffffff" stroke="#60a5fa"/>
+  <text x="296" y="446" font-size="13" font-weight="700" fill="#1e3a8a">ports/ (typing.Protocol) and adapters/</text>
+  <g font-size="12" fill="#0f172a">
+    <rect x="296" y="458" width="176" height="112" rx="6" fill="#dcfce7" stroke="#4ade80"/>
+    <text x="384" y="478" text-anchor="middle" font-weight="600">AI providers</text>
+    <text x="384" y="497" text-anchor="middle" fill="#334155">MockAIProvider (default,</text>
+    <text x="384" y="513" text-anchor="middle" fill="#334155">offline, deterministic)</text>
+    <text x="384" y="532" text-anchor="middle" fill="#334155">Secondary: mock in drift</text>
+    <text x="384" y="548" text-anchor="middle" fill="#334155">mode (for Gate 5)</text>
+
+    <rect x="482" y="458" width="176" height="112" rx="6" fill="#dcfce7" stroke="#4ade80"/>
+    <text x="570" y="478" text-anchor="middle" font-weight="600">VCS normalizers</text>
+    <text x="570" y="497" text-anchor="middle" fill="#334155">GitHub and GitLab</text>
+    <text x="570" y="513" text-anchor="middle" fill="#334155">payload to ChangeRequest</text>
+    <text x="570" y="532" text-anchor="middle" fill="#334155">No outbound VCS calls,</text>
+    <text x="570" y="548" text-anchor="middle" fill="#334155">no signature check</text>
+
+    <rect x="668" y="458" width="176" height="112" rx="6" fill="#dcfce7" stroke="#4ade80"/>
+    <text x="756" y="478" text-anchor="middle" font-weight="600">SQLAlchemy 2 repos</text>
+    <text x="756" y="497" text-anchor="middle" fill="#334155">changes, CAB tickets,</text>
+    <text x="756" y="513" text-anchor="middle" fill="#334155">audit log, kill switch</text>
+    <text x="756" y="532" text-anchor="middle" fill="#334155">psycopg 3, JSONB</text>
+  </g>
+
+  <!-- External AI optional -->
+  <rect x="296" y="618" width="260" height="62" rx="8" fill="#fffbeb" stroke="#d97706" stroke-dasharray="6 4"/>
+  <text x="426" y="642" text-anchor="middle" font-size="12" font-weight="600" fill="#92400e">ExternalAIProvider (optional, off)</text>
+  <text x="426" y="661" text-anchor="middle" font-size="11" fill="#92400e">Only if AI_PROVIDER=external + URL + key.</text>
+  <text x="426" y="675" text-anchor="middle" font-size="11" fill="#92400e">No real endpoint tested in this repo.</text>
+  <line x1="384" y1="570" x2="400" y2="616" stroke="#d97706" stroke-dasharray="5 4" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- PostgreSQL -->
+  <rect x="920" y="110" width="260" height="250" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="1050" y="136" text-anchor="middle" font-size="15" font-weight="700" fill="#4c1d95">PostgreSQL 16 (db)</text>
+  <g font-size="12" fill="#334155">
+    <text x="940" y="164">changes</text>
+    <text x="940" y="184">risk_assessments</text>
+    <text x="940" y="204">ai_assessments</text>
+    <text x="940" y="224">gate_results</text>
+    <text x="940" y="244">routing_decisions</text>
+    <text x="940" y="264">cab_tickets</text>
+    <text x="940" y="284">audit_records (hash-chained)</text>
+    <text x="940" y="304">kill_switch_state</text>
+  </g>
+  <text x="1050" y="338" text-anchor="middle" font-size="11" fill="#6d28d9">Schema managed by Alembic</text>
+
+  <!-- Prometheus optional -->
+  <rect x="920" y="392" width="260" height="70" rx="10" fill="#fff7ed" stroke="#ea580c" stroke-dasharray="6 4"/>
+  <text x="1050" y="418" text-anchor="middle" font-size="13" font-weight="600" fill="#9a3412">Prometheus (optional)</text>
+  <text x="1050" y="438" text-anchor="middle" font-size="11" fill="#9a3412">compose profile "monitoring", :9090</text>
+  <text x="1050" y="453" text-anchor="middle" font-size="11" fill="#9a3412">scrapes app:8000/metrics</text>
+
+  <!-- Arrows -->
+  <line x1="220" y1="138" x2="278" y2="150" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="220" y1="206" x2="278" y2="160" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="220" y1="274" x2="278" y2="170" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="220" y1="342" x2="278" y2="178" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="220" y1="410" x2="278" y2="186" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="844" y1="514" x2="918" y2="300" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="905" y="420" font-size="11" fill="#6d28d9" text-anchor="end">SQL</text>
+  <line x1="918" y1="427" x2="862" y2="160" stroke="#ea580c" stroke-dasharray="5 4" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Deployment band -->
+  <rect x="20" y="700" width="1160" height="146" rx="12" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="40" y="726" font-size="14" font-weight="700" fill="#0f172a">Deployment</text>
+  <g font-size="12">
+    <rect x="40" y="740" width="540" height="92" rx="8" fill="#ffffff" stroke="#2563eb"/>
+    <text x="56" y="762" font-weight="700" fill="#1e3a8a">docker-compose.yml (local, bridge network changeguard-net)</text>
+    <text x="56" y="783" fill="#334155">db (postgres:16, volume changeguard_db_data, :5432)</text>
+    <text x="56" y="801" fill="#334155">migrate (runs alembic upgrade head once, then exits)</text>
+    <text x="56" y="819" fill="#334155">app (non-root image, :8000, healthcheck /health) · prometheus (profile)</text>
+
+    <rect x="600" y="740" width="560" height="92" rx="8" fill="#ffffff" stroke="#64748b" stroke-dasharray="6 4"/>
+    <text x="616" y="762" font-weight="700" fill="#334155">infrastructure/aws and infrastructure/gcp (Terraform reference only)</text>
+    <text x="616" y="783" fill="#475569">AWS: VPC, ALB (443), ECS Fargate, RDS PostgreSQL, Secrets Manager, ECR</text>
+    <text x="616" y="801" fill="#475569">GCP: VPC, Cloud Run v2, Cloud SQL (private IP), Secret Manager, Artifact Registry</text>
+    <text x="616" y="819" fill="#475569">CI runs fmt/init/validate only. Never applied; no cloud resources exist.</text>
+  </g>
+</svg>
